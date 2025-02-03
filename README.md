@@ -19,7 +19,7 @@ To test metadata extraction locally without building container image:
 `pip install pyspark`
 
 2. Download **ojdbc11.jar** (or the version you prefer).
-3. Change driver path in [source code](src/oracle_connector.py).
+3. Change driver path in [source code](src/postgresql_connector.py).
 4. Install dependencies from the requirements.txt:
 
 `pip install -r requirements.txt`

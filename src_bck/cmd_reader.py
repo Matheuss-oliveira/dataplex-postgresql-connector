@@ -17,23 +17,20 @@ def read_args():
              "full resource name: projects/${target_project_id}/"
              "locations/${target_location_id}/entryGroups/${target_entry_group_id}.")
 
-    # PostgreSQL arguments
-    parser.add_argument("--host", type=str, required=True,
-        help="PostgreSQL host address.")
-    parser.add_argument("--host_port", type=int, required=True,
-        help="PostgreSQL port number.")
-    parser.add_argument("--user", type=str, required=True,
-        help="PostgreSQL username.")
+    # Oracle arguments
+    parser.add_argument("--host_port", type=str, required=True,
+        help="Oracle host and port number separated by the colon (:).")
+    parser.add_argument("--user", type=str, required=True, help="Oracle User.")
     parser.add_argument("--password-secret", type=str, required=True,
-        help="Secret resource name in the Secret Manager for the PostgreSQL password.")
+        help="Secret resource name in the Secret Manager for the Oracle password.")
     parser.add_argument("--database", type=str, required=True,
-        help="Source PostgreSQL database name.")
+        help="Source Oracle database.")
 
     # Google Cloud Storage arguments
     # It is assumed that the bucket is in the same region as the entry group
     parser.add_argument("--output_bucket", type=str, required=True,
         help="The Cloud Storage bucket to write the generated metadata import file.")
     parser.add_argument("--output_folder", type=str, required=True,
-        help="A folder in the Cloud Storage bucket to write the generated metadata import files.")
+        help="A folder in the Cloud Storage bucket, to write the generated metadata import files.")
 
     return vars(parser.parse_known_args()[0])

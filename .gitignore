@@ -1,2 +1,6 @@
 .idea
 .venv/
+output.jsonl
+cloud-sql-proxy
+src/__pycache__
+src/postgresql-42.0.1-20170503.191129-22.jar
