@@ -17,7 +17,7 @@ def create_fqn(config: Dict[str, str], entry_type: EntryType,
 
     if entry_type == EntryType.INSTANCE:
         # Requires backticks to escape column
-        return f"{SOURCE_TYPE}:`{config['host']}`"
+        return f"{SOURCE_TYPE}:`{config['host_port']}`"
     if entry_type == EntryType.DATABASE:
         instance = create_fqn(config, EntryType.INSTANCE)
         return f"{instance}.{config['database']}"
@@ -42,7 +42,7 @@ def create_name(config: Dict[str, str], entry_type: EntryType,
             f"entryGroups/{config['target_entry_group_id']}/"
             f"entries/"
         )
-        return name_prefix + str(config["host"]).replace(":", "@")
+        return name_prefix + config["host_port"].replace(":", "@")
     if entry_type == EntryType.DATABASE:
         instance = create_name(config, EntryType.INSTANCE)
         return f"{instance}/databases/{config['database']}"

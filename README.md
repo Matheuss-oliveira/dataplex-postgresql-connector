@@ -23,3 +23,17 @@ To test metadata extraction locally without building container image:
 4. Install dependencies from the requirements.txt:
 
 `pip install -r requirements.txt`
+
+
+
+--- 
+main.py --target_project_id lab-xwf-cni \
+    --target_location_id us-central1 \
+    --target_entry_group_id postgresql-entry-group \
+    --host 127.0.0.1 \
+    --host_port 5432 \
+    --user postgres \
+    --password-secret pass \
+    --database postgres \
+    --output_bucket dataplex-connector-bucket \
+    --output_folder dataplex-connector-folder

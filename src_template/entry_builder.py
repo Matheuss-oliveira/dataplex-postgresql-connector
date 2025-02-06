@@ -48,7 +48,6 @@ def _create_entry(config: Dict[str, str], entry_type: EntryType):
     entry_aspect.data = {}
     entry.aspects[aspect_key] = entry_aspect
 
-    print('[ENTRY]', entry, sep='\n')
     return entry
 
 
@@ -59,13 +58,10 @@ def _entry_to_import_item(entry: dataplex_v1.Entry):
     import_item.aspect_keys = list(entry.aspects.keys())
     import_item.update_mask = "aspects"
 
-    print('[IMPORT_ITEM]', import_item, sep='\n')
     return import_item
 
 
 def create(config, entry_type: EntryType):
     """Creates an entry, packs it to Import Item and converts to json."""
     import_item = _entry_to_import_item(_create_entry(config, entry_type))
-    json_line = json.dumps(dataclasses.asdict(import_item, dict_factory=_dict_factory))
-    print('[JSON_LINE]', json_line, sep='\n')
-    return json_line
+    return json.dumps(dataclasses.asdict(import_item, dict_factory=_dict_factory))

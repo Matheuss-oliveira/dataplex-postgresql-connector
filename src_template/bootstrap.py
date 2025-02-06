@@ -7,7 +7,7 @@ from src import secret_manager
 from src import entry_builder
 from src import gcs_uploader
 from src import top_entry_builder
-from src.postgresql_connector import PostgreSQLConnector
+from src.postgresql_connector import OracleConnector
 
 
 FILENAME = "output.jsonl"
@@ -15,12 +15,17 @@ FILENAME = "output.jsonl"
 
 def write_jsonl(output_file, json_strings):
     """Writes a list of string to the file in JSONL format."""
+
+    # For simplicity, dataset is written into the one file. But it is not
+    # mandatory, and the order doesn't matter for Import API.
+    # The PySpark itself could dump entries into many smaller JSONL files.
+    # Due to performance, it's recommended to dump to many smaller files.
     for string in json_strings:
         output_file.write(string + "\n")
 
 
 def process_dataset(
-    connector: PostgreSQLConnector,
+    connector: OracleConnector,
     config: Dict[str, str],
     schema_name: str,
     entry_type: EntryType,
@@ -34,29 +39,27 @@ def process_dataset(
 def run():
     """Runs a pipeline."""
     config = cmd_reader.read_args()
-    config["password"] = secret_manager.get_password(config["target_project_id"], config["password_secret"])
-    connector = PostgreSQLConnector(config)
+    config["password"] = secret_manager.get_password(config["password_secret"])
+    connector = OracleConnector(config)
 
     with open(FILENAME, "w", encoding="utf-8") as file:
-        # Write top entries
-        top_entries = [
-            top_entry_builder.create(config, EntryType.INSTANCE),
-            top_entry_builder.create(config, EntryType.DATABASE)
-        ]
-        file.write("\n".join(top_entries) + "\n")
+        # Write top entries that don't require connection to the database
+        file.writelines(top_entry_builder.create(config, EntryType.INSTANCE))
+        file.writelines("\n")
+        file.writelines(top_entry_builder.create(config, EntryType.DATABASE))
 
-        # Get schemas
+        # Get schemas, write them and collect to the list
         df_raw_schemas = connector.get_db_schemas()
-        schemas = [row.schema_name for row in df_raw_schemas.collect()]  # Changed USERNAME to schema_name
+        schemas = [schema.USERNAME for schema in df_raw_schemas.select("USERNAME").collect()]
         schemas_json = entry_builder.build_schemas(config, df_raw_schemas).toJSON().collect()
+
         write_jsonl(file, schemas_json)
 
-        # Process tables and views
+        # Ingest tables and views for every schema in a list
         for schema in schemas:
             print(f"Processing tables for {schema}")
             tables_json = process_dataset(connector, config, schema, EntryType.TABLE)
             write_jsonl(file, tables_json)
-
             print(f"Processing views for {schema}")
             views_json = process_dataset(connector, config, schema, EntryType.VIEW)
             write_jsonl(file, views_json)
