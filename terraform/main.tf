@@ -28,13 +28,18 @@ resource "google_dataplex_aspect_type" "aspect_type" {
   aspect_type_id = each.key
   project        = var.project_id
   location       = var.region
+  metadata_template = jsonencode({
+  name         = "empty-template"
+  type         = "record"
+  recordFields = []
+  })
 }
 
 resource "google_dataplex_entry_type" "entry_type" {
   for_each      = toset(var.entry_types)
   entry_type_id = each.key
   project       = var.project_id
-  location       = var.region
+  location      = var.region
 }
 
 
@@ -43,3 +48,13 @@ resource "google_dataplex_entry_group" "entry_group" {
   project = var.project_id
   location = var.region
 }
+
+
+resource "google_artifact_registry_repository" "artifact_registry" {
+  provider      = google
+  repository_id = var.artifact_registry_id
+  location      = var.region
+  format        = "DOCKER"
+  project       = var.project_id
+}
+

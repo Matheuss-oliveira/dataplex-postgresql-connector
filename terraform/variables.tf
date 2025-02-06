@@ -23,23 +23,23 @@ variable "entry_group" {
 variable "aspect_types" {
   type = list(string)
   description = "List of Dataplex Aspect Type IDs to create"
-  default = [
-    "postgresql-database",
-    "postgresql-instance",
-    "postgresql-schema",
-    "postgresql-table",
-    "postgresql-view"
-  ]
 }
 
 variable "entry_types" {
   type = list(string)
   description = "List of Dataplex Entry Type IDs to create"
-  default = [
-    "postgresql-database",
-    "postgresql-instance",
-    "postgresql-schema",
-    "postgresql-table",
-    "postgresql-view"
-  ]
+}
+
+variable "artifact_registry_id" {
+  type = string
+}
+
+variable "aspect_type_metadata_template" {
+  type = string
+  default = <<EOF
+{
+  "name": "tf-test-template",
+  "type": "string"
+}
+EOF
 }

@@ -15,3 +15,4 @@ entry_types = [
     "postgresql2-table",
     "postgresql2-view"
   ]
+artifact_registry_id = "dataplex-connectors2"
