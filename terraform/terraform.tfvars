@@ -16,3 +16,10 @@ entry_types = [
     "postgresql2-view"
   ]
 artifact_registry_id = "dataplex-connectors2"
+
+api_services = [
+    "dataplex.googleapis.com",
+    "dataproc.googleapis.com",
+    "workflows.googleapis.com",
+    "artifactregistry.googleapis.com",
+]

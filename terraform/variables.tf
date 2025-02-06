@@ -43,3 +43,7 @@ variable "aspect_type_metadata_template" {
 }
 EOF
 }
+
+variable "api_services" {
+  type = list(string)
+}

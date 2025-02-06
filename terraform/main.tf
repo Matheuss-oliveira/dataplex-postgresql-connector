@@ -58,3 +58,16 @@ resource "google_artifact_registry_repository" "artifact_registry" {
   project       = var.project_id
 }
 
+# APIS
+resource "google_project_service" "enabled_apis" {
+  for_each = toset(var.api_services)  # Use toset to ensure uniqueness
+
+  service            = each.value
+  disable_on_destroy = false
+  project            = var.project_id
+}
+
+# To ensure all APIs are enabled before other resources are created:
+resource "null_resource" "api_dependencies" {
+  depends_on = [google_project_service.enabled_apis]
+}
