@@ -116,7 +116,7 @@ resource "google_storage_bucket_iam_member" "storage_object_user" {
   bucket   = var.bucket_name
   role     = "roles/storage.objectUser"
   member   = "serviceAccount:${google_service_account.dataplex_sa.email}"
-  depends_on = [google_service_account.dataplex_sa, google_project_iam_member.dataplex_sa_roles]
+  depends_on = [google_service_account.dataplex_sa, google_project_iam_member.dataplex_sa_roles, google_storage_bucket.my_bucket]
 }
 
 resource "google_artifact_registry_repository_iam_member" "artifact_registry_reader" {
@@ -126,5 +126,15 @@ resource "google_artifact_registry_repository_iam_member" "artifact_registry_rea
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:${google_service_account.dataplex_sa.email}"
   depends_on = [google_service_account.dataplex_sa, google_project_iam_member.dataplex_sa_roles]
+}
+
+resource "google_secret_manager_regional_secret" "secret-basic" {
+  secret_id = var.secret_name
+  location = var.region
+}
+
+resource "google_secret_manager_regional_secret_version" "regional_secret_version_basic" {
+  secret = google_secret_manager_regional_secret.secret-basic.id
+  secret_data = "1osUtXYHsvHnkN7g" # TODO this is unsafe for prod, use for testing only
 }
 

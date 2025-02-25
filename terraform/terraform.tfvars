@@ -1,5 +1,5 @@
 project_id  = "dataplex-cni-3434"
-bucket_name = "bucket-test-343"
+bucket_name = "bucket-test-3434"
 entry_group = "postgresql-entry-group"
 service_account_id = "dataplex-connector-sa"
 aspect_types = [
@@ -28,6 +28,7 @@ api_services2 = [
     "dataproc.googleapis.com",
     "workflows.googleapis.com",
     "artifactregistry.googleapis.com",
+    "secretmanager.googleapis.com"
 ]
 
 secret_name = "dataplex-postgresql-connector-secret"
@@ -43,7 +44,6 @@ roles = [
     "roles/dataproc.worker",
     "roles/secretmanager.secretAccessor",
     "roles/storage.objectUser",
-    "storage.buckets.create",
     "roles/artifactregistry.reader",
     "roles/artifactregistry.writer",
     "roles/workflows.invoker",

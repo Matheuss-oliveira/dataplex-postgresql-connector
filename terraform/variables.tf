@@ -13,7 +13,7 @@ variable "region" {
 variable "bucket_name" {
   type        = string
   description = "The name of the Google Cloud Storage bucket"
-  default     = "test-terraform-bucket-343" # Change this to your desired bucket name
+  default     = "test-terraform-bucket-3434" # Change this to your desired bucket name
 }
 
 variable "entry_group" {

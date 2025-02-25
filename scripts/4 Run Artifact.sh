@@ -5,9 +5,9 @@
 echo gcloud dataproc batches submit pyspark \
     --project=${PROJECT_ID} \
     --region=${REGION} \
-    --deps-bucket=${DEPS_BUCKET} \
+    --deps-bucket=${OUTPUT_BUCKET} \
     --container-image=${REPO_IMAGE} \
-    --jars=${SPARK_EXTRA_JARS_DIR} \
+    --jars=${SPARK_JAR_PATH} \
     --network=${NETWORK_NAME} \
     main.py \
 --  --target_project_id ${PROJECT_ID} \
@@ -24,9 +24,9 @@ echo gcloud dataproc batches submit pyspark \
 gcloud dataproc batches submit pyspark \
   --project=dataplex-cni-3434 \
   --region=us-central1 \
-  --jars=gs://bucket-test-3434/jars/postgresql-42.7.5.jar \
+  --jars=postgresql.jar \
   --deps-bucket=bucket-test-3434 \
-  --container-image=us-central1-docker.pkg.dev/dataplex-cni-3434/dataplex-connectors2/postgresql-pyspark \
+  --container-image=us-central1-docker.pkg.dev/dataplex-cni-3434/dataplex-connectors/postgresql-pyspark \
   --network=default \
   main.py \
   -- \
@@ -37,7 +37,7 @@ gcloud dataproc batches submit pyspark \
   --port 5432 \
   --user postgres \
   --database postgres \
-  --password-secret projects/73813454526/secrets/dataplexagent_postgres \
+  --password-secret dataplex-postgresql-connector-secret \
   --output_bucket bucket-test-3434 \
   --output_folder output_folder
 

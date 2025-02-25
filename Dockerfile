@@ -5,8 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y procps tini
 RUN apt install -y wget
 
-ENV SPARK_EXTRA_JARS_DIR=/opt/spark/jars/
-RUN mkdir -p "${SPARK_EXTRA_JARS_DIR}"
+COPY postgresql.jar .
 
 ENV CONDA_HOME=/opt/miniconda3
 ENV PYSPARK_PYTHON=${CONDA_HOME}/bin/python
@@ -34,7 +33,6 @@ RUN python -m pip install -r requirements.txt
 ENV PYTHONPATH=/opt/python/packages
 RUN mkdir -p "${PYTHONPATH}/src/"
 COPY src/ "${PYTHONPATH}/src/"
-#COPY "${SOURCE_JAR_PATH}" "${SPARK_EXTRA_JARS_DIR}"
 
 COPY main.py .
 

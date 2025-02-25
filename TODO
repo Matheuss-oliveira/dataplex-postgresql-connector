@@ -9,3 +9,5 @@ run import bucket origin depending on timestamp
 jar goes to bucket, or not? probably not
 cloud nat (terraform readme)
 TODO metadata job ID
+service account name
+subnet com private access + nat + router

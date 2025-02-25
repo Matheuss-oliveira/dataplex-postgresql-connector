@@ -5,15 +5,18 @@ from pyspark.sql import SparkSession, DataFrame
 
 from src.constants import EntryType
 
-SPARK_JAR_PATH = os.environ.get('SPARK_JAR_PATH')
+SPARK_JAR_PATH = 'postgresql.jar'
 
 class PostgreSQLConnector:
     """Reads data from PostgreSQL and returns Spark Dataframes."""
 
     def __init__(self, config: Dict[str, str]):
-        # PySpark entrypoint
+        # PySpark entrypoint - # Security manager some problems
         self._spark = SparkSession.builder.appName("PostgreSQLIngestor") \
             .config("spark.jars", SPARK_JAR_PATH) \
+            .config("spark.hadoop.fs.permissions.enabled", "false") \
+            .config("spark.executor.extraJavaOptions", "-Djava.security.manager=allow") \
+            .config("spark.driver.extraJavaOptions", "-Djava.security.manager=allow") \
             .getOrCreate()
 
         self._config = config
