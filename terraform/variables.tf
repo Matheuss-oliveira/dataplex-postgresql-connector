@@ -34,16 +34,21 @@ variable "artifact_registry_id" {
   type = string
 }
 
-variable "aspect_type_metadata_template" {
+variable "service_account_id" {
   type = string
-  default = <<EOF
-{
-  "name": "tf-test-template",
-  "type": "string"
-}
-EOF
 }
 
-variable "api_services" {
+variable "api_services1" {
+  type = list(string)
+}
+variable "api_services2" {
+  type = list(string)
+}
+
+variable "secret_name" {
+  type = string
+}
+
+variable "roles" {
   type = list(string)
 }

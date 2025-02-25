@@ -59,8 +59,16 @@ resource "google_artifact_registry_repository" "artifact_registry" {
 }
 
 # APIS
-resource "google_project_service" "enabled_apis" {
-  for_each = toset(var.api_services)  # Use toset to ensure uniqueness
+resource "google_project_service" "enabled_apis1" {
+  for_each = toset(var.api_services2)  # Use toset to ensure uniqueness
+
+  service            = each.value
+  disable_on_destroy = false
+  project            = var.project_id
+}
+
+resource "google_project_service" "enabled_apis2" {
+  for_each = toset(var.api_services2)  # Use toset to ensure uniqueness
 
   service            = each.value
   disable_on_destroy = false
@@ -69,5 +77,54 @@ resource "google_project_service" "enabled_apis" {
 
 # To ensure all APIs are enabled before other resources are created:
 resource "null_resource" "api_dependencies" {
-  depends_on = [google_project_service.enabled_apis]
+  depends_on = [google_project_service.enabled_apis1, google_project_service.enabled_apis2]
 }
+
+# SECRET
+resource "google_secret_manager_secret" "secret" {
+  secret_id = var.secret_name
+
+  replication {
+    auto {}
+  }
+}
+
+# SERVICE ACCOUNT
+
+resource "google_service_account" "dataplex_sa" {
+  account_id   = var.service_account_id
+  display_name = "Dataplex Service Account"
+}
+
+resource "google_project_iam_member" "dataplex_sa_roles" {
+  for_each = toset(var.roles)
+
+  project = var.project_id
+  role    = each.value
+  member  = "serviceAccount:${google_service_account.dataplex_sa.email}"
+  depends_on = [google_service_account.dataplex_sa]
+}
+
+resource "google_secret_manager_secret_iam_member" "secret_accessor" {
+  secret_id = var.secret_name
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.dataplex_sa.email}"
+  depends_on = [google_service_account.dataplex_sa, google_project_iam_member.dataplex_sa_roles]
+}
+
+resource "google_storage_bucket_iam_member" "storage_object_user" {
+  bucket   = var.bucket_name
+  role     = "roles/storage.objectUser"
+  member   = "serviceAccount:${google_service_account.dataplex_sa.email}"
+  depends_on = [google_service_account.dataplex_sa, google_project_iam_member.dataplex_sa_roles]
+}
+
+resource "google_artifact_registry_repository_iam_member" "artifact_registry_reader" {
+  location   = var.region
+  project    = var.project_id
+  repository = var.artifact_registry_id
+  role       = "roles/artifactregistry.reader"
+  member     = "serviceAccount:${google_service_account.dataplex_sa.email}"
+  depends_on = [google_service_account.dataplex_sa, google_project_iam_member.dataplex_sa_roles]
+}
+

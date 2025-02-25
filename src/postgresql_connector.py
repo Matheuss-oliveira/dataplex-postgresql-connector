@@ -1,11 +1,11 @@
 """Reads PostgreSQL using PySpark."""
+import os
 from typing import Dict
 from pyspark.sql import SparkSession, DataFrame
 
 from src.constants import EntryType
 
-
-SPARK_JAR_PATH = "src/postgresql-42.0.1-20170503.191129-22.jar"  # Updated PostgreSQL JDBC driver
+SPARK_JAR_PATH = os.environ.get('SPARK_JAR_PATH')
 
 class PostgreSQLConnector:
     """Reads data from PostgreSQL and returns Spark Dataframes."""
@@ -18,7 +18,7 @@ class PostgreSQLConnector:
 
         self._config = config
         # Updated JDBC URL format for PostgreSQL
-        self._url = f"jdbc:postgresql://{config['host']}:{config['host_port']}/{config['database']}"
+        self._url = f"jdbc:postgresql://{config['host']}:{config['port']}/{config['database']}"
 
     def _execute(self, query: str) -> DataFrame:
         """A generic method to execute any query."""

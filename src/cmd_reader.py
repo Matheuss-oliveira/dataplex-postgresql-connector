@@ -20,7 +20,7 @@ def read_args():
     # PostgreSQL arguments
     parser.add_argument("--host", type=str, required=True,
         help="PostgreSQL host address.")
-    parser.add_argument("--host_port", type=int, required=True,
+    parser.add_argument("--port", type=int, required=True,
         help="PostgreSQL port number.")
     parser.add_argument("--user", type=str, required=True,
         help="PostgreSQL username.")

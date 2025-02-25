@@ -7,8 +7,5 @@ def get_password(project_id, secret: str) -> str:
     client = secretmanager.SecretManagerServiceClient()
     secret_path = f"projects/{project_id}/secrets/{secret}/latest"
 
-    return 'dsfsd2312!@' # TODO
-
-
     response = client.access_secret_version(request={"name": secret_path})
     return response.payload.data.decode("UTF-8")

@@ -1,0 +1,11 @@
+{
+  "CLOUD_REGION": "us-central1",
+  "POSTGRESQL_USER": "postgres",
+  "POSTGRESQL_PORT": "x.x.x.x:5432",
+  "POSTGRESQL_DATABASE": "postgres",
+  "ADDITIONAL_CONNECTOR_ARGS": [],
+
+  "SOURCE": "postgresql",
+  "JAR_PATH": "/opt/spark/jars/postgresql-42.0.1-20170503.191129-22.jar"
+  "CUSTOM_CONTAINER_IMAGE": "us-central1-docker.pkg.dev/lab-xwf-cni/cloud-run-source-deploy/dataplex"
+}

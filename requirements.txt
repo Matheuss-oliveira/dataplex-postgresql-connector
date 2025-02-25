@@ -1,4 +1,7 @@
 google-cloud-dataplex==2.2.2
 google-cloud-storage
 google-cloud-secret-manager
-pyspark
+pyspark~=3.5.4
+protobuf~=5.29.3
+proto-plus~=1.26.0
+python-dotenv
