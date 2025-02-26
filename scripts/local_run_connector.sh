@@ -1,0 +1,11 @@
+python main.py \
+    --target_project_id=${PROJECT_ID} \
+    --target_location_id=${LOCATION_ID} \
+    --target_entry_group_id=${TARGET_ENTRY_GROUP} \
+    --host=${DB_HOST} \
+    --port=${DB_PORT} \
+    --user=${DB_USER} \
+    --password-secret=${DB_PASSWORD_SECRET} \
+    --database=${DB_DATABASE} \
+    --output_bucket=${OUTPUT_BUCKET} \
+    --output_folder=${OUTPUT_FOLDER}

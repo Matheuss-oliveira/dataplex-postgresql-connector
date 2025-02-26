@@ -1,0 +1,30 @@
+- submit_import_job:
+call: http.post
+args:
+  url: ${"https://dataplex.googleapis.com/v1/projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/metadataJobs?metadata_job_id=" + WORKFLOW_ID}
+  auth:
+    type: OAuth2
+    scopes: "https://www.googleapis.com/auth/cloud-platform"
+  body:
+    type: IMPORT
+    import_spec:
+      source_storage_uri: ${"gs://" + args.CLOUD_STORAGE_BUCKET_ID + "/" + WORKFLOW_ID + "/"}
+      entry_sync_mode: FULL
+      aspect_sync_mode: INCREMENTAL
+      scope:
+        entry_groups:
+          - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryGroups/"+args.TARGET_ENTRY_GROUP_ID}
+        entry_types:
+          - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryTypes/postgresql-instance"}
+          - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryTypes/postgresql-database"}
+          - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryTypes/postgresql-schema"}
+          - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryTypes/postgresql-table"}
+          - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryTypes/postgresql-view"}
+        aspect_types:
+          - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/aspectTypes/postgresql-instance"}
+          - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/aspectTypes/postgresql-database"}
+          - "projects/dataplex-types/locations/global/aspectTypes/schema"
+          - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/aspectTypes/postgresql-schema"}
+          - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/aspectTypes/postgresql-table"}
+          - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/aspectTypes/postgresql-view"}
+result: IMPORT_JOB_RESPONSE

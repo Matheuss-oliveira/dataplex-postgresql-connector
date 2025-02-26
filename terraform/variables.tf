@@ -1,19 +1,16 @@
 variable "project_id" {
   type        = string
   description = "The ID of the Google Cloud project"
-  default     = "lab-xwf-cni" # Change this to your actual project ID
 }
 
 variable "region" {
   type        = string
   description = "The Google Cloud region to deploy resources in"
-  default     = "us-central1"
 }
 
 variable "bucket_name" {
   type        = string
   description = "The name of the Google Cloud Storage bucket"
-  default     = "test-terraform-bucket-3434" # Change this to your desired bucket name
 }
 
 variable "entry_group" {

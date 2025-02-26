@@ -1,6 +1,7 @@
 project_id  = "dataplex-cni-3434"
 bucket_name = "bucket-test-3434"
 entry_group = "postgresql-entry-group"
+region = "us-central1"
 service_account_id = "dataplex-connector-sa"
 aspect_types = [
     "postgresql-database",

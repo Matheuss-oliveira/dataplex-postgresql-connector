@@ -1,0 +1,34 @@
+- submit_pyspark_extract_job:
+    call: http.post
+    args:
+      url: ${"https://dataproc.googleapis.com/v1/projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/batches"}
+      auth:
+        type: OAuth2
+        scopes: "https://www.googleapis.com/auth/cloud-platform"
+      headers:
+        Content-Type: "application/json"
+      query:
+        batchId: ${WORKFLOW_ID}
+      body:
+        pysparkBatch:
+          mainPythonFileUri: file:///main.py
+          jarFileUris:
+            - ${"file://" + args.JAR_PATH}
+          args:
+            - ${"--host=" + args.POSTGRESQL_HOST}
+            - ${"--port=" + args.POSTGRESQL_PORT}
+            - ${"--user=" + args.POSTGRESQL_USER}
+            - ${"--password=" + args.POSTGRESQL_PASSWORD}
+            - ${"--database=" + args.POSTGRESQL_DATABASE}
+            - ${"--target_project_id=" + args.TARGET_PROJECT_ID}
+            - ${"--target_location_id=" + args.CLOUD_REGION}
+            - ${"--target_entry_group_id=" + args.TARGET_ENTRY_GROUP_ID}
+            - ${"--output_bucket=" + args.CLOUD_STORAGE_BUCKET_ID}
+            - ${"--output_folder=" + WORKFLOW_ID}
+        runtimeConfig:
+          version: "2.2"
+          containerImage: ${args.CUSTOM_CONTAINER_IMAGE}
+        environmentConfig:
+          executionConfig:
+              serviceAccount: ${args.SERVICE_ACCOUNT}
+    result: RESPONSE_MESSAGE

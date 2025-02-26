@@ -1,10 +1,16 @@
+#Docker preconfig
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+
+#Vars
 PROJECT_ID=dataplex-cni-3434
 LOCATION_ID=us-central1
 OUTPUT_FOLDER=output_folder
 OUTPUT_BUCKET=bucket-test-3434
 NETWORK_NAME=default
 
-SPARK_JAR_PATH=postgresql-42.7.5.jar
+SPARK_JAR_PATH=postgresql.jar
 
 SOURCE=postgresql
 TARGET_ENTRY_GROUP=${SOURCE}-entry-group

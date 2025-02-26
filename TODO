@@ -11,3 +11,10 @@ cloud nat (terraform readme)
 TODO metadata job ID
 service account name
 subnet com private access + nat + router
+secret iac not working
+    "SERVICE_ACCOUNT": "SERVICE_ACCOUNT_ID", on workflow vars
+    diferent buckets, sas
+#https://cloud.google.com/sdk/gcloud/reference/dataproc/batches/submit
+# subnet with private google access must be enabled (default meyabe)
+# todo maybe service account, batch ID, others
+sa for workflow

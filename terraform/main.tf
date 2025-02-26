@@ -125,7 +125,7 @@ resource "google_artifact_registry_repository_iam_member" "artifact_registry_rea
   repository = var.artifact_registry_id
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:${google_service_account.dataplex_sa.email}"
-  depends_on = [google_service_account.dataplex_sa, google_project_iam_member.dataplex_sa_roles]
+  depends_on = [google_service_account.dataplex_sa, google_project_iam_member.dataplex_sa_roles, google_artifact_registry_repository.artifact_registry]
 }
 
 resource "google_secret_manager_regional_secret" "secret-basic" {
@@ -137,4 +137,3 @@ resource "google_secret_manager_regional_secret_version" "regional_secret_versio
   secret = google_secret_manager_regional_secret.secret-basic.id
   secret_data = "1osUtXYHsvHnkN7g" # TODO this is unsafe for prod, use for testing only
 }
-

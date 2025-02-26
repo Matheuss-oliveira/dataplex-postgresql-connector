@@ -1,0 +1,34 @@
+{
+    "CLOUD_REGION": "us-central1",
+    "POSTGRESQL_HOST": "repulsively-volcanic-goldfinch.data-1.use1.tembo.io",
+    "POSTGRESQL_USER": "postgres",
+    "POSTGRESQL_PORT": "5432",
+    "POSTGRESQL_DATABASE": "postgres",
+    "POSTGRESQL_PASSWORD": "dataplex-postgresql-connector-secret",
+    "ADDITIONAL_CONNECTOR_ARGS": [],
+    "SERVICE_ACCOUNT": "220147359620-compute@developer.gserviceaccount.com",
+    "TARGET_PROJECT_ID": "dataplex-cni-3434",
+    "TARGET_ENTRY_GROUP_ID": "postgresql-entry-group",
+    "JAR_PATH": "/postgresql.jar",
+    "CREATE_TARGET_ENTRY_GROUP": false,
+    "CLOUD_STORAGE_BUCKET_ID": "bucket-test-3434",
+    "CUSTOM_CONTAINER_IMAGE": "us-central1-docker.pkg.dev/dataplex-cni-3434/dataplex-connectors/postgresql-pyspark",
+    "IMPORT_JOB_SCOPE_ENTRY_TYPES":  [
+        "projects/dataplex-cni-3434/locations/us-central1/entryTypes/postgresql-instance",
+        "projects/dataplex-cni-3434/locations/us-central1/entryTypes/postgresql-database",
+        "projects/dataplex-cni-3434/locations/us-central1/entryTypes/postgresql-schema",
+        "projects/dataplex-cni-3434/locations/us-central1/entryTypes/postgresql-table",
+        "projects/dataplex-cni-3434/locations/us-central1/entryTypes/postgresql-view"],
+    "IMPORT_JOB_SCOPE_ASPECT_TYPES": [
+        "projects/dataplex-cni-3434/locations/us-central1/aspectTypes/postgresql-instance",
+        "projects/dataplex-types/locations/global/aspectTypes/schema",
+        "projects/dataplex-cni-3434/locations/us-central1/aspectTypes/postgresql-database",
+        "projects/dataplex-cni-3434/locations/us-central1/aspectTypes/postgresql-schema",
+        "projects/dataplex-cni-3434/locations/us-central1/aspectTypes/postgresql-table",
+        "projects/dataplex-cni-3434/locations/us-central1/aspectTypes/postgresql-view"],
+    "IMPORT_JOB_LOG_LEVEL": "INFO",
+    "NETWORK_TAGS": [],
+    "NETWORK_URI": "",
+    "SUBNETWORK_URI": ""
+}
+

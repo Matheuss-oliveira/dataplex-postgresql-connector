@@ -1,11 +1,15 @@
 """Reads PostgreSQL using PySpark."""
 import os
+import logging
 from typing import Dict
 from pyspark.sql import SparkSession, DataFrame
 
 from src.constants import EntryType
 
-SPARK_JAR_PATH = 'postgresql.jar'
+SPARK_JAR_PATH = '/postgresql.jar'
+cwd = os.getcwd()
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logging.info(SPARK_JAR_PATH)
 
 class PostgreSQLConnector:
     """Reads data from PostgreSQL and returns Spark Dataframes."""

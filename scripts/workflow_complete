@@ -69,19 +69,21 @@ main:
           body:
             pysparkBatch:
               mainPythonFileUri: file:///main.py
-              jars: ${"file://" + args.JAR_PATH}"
+              jarFileUris:
+                - ${"file://" + args.JAR_PATH}
               args:
+                - ${"--host=" + args.POSTGRESQL_HOST}
                 - ${"--port=" + args.POSTGRESQL_PORT}
                 - ${"--user=" + args.POSTGRESQL_USER}
                 - ${"--password=" + args.POSTGRESQL_PASSWORD}
                 - ${"--database=" + args.POSTGRESQL_DATABASE}
-                - ${"--project=" + args.TARGET_PROJECT_ID}
-                - ${"--location=" + args.CLOUD_REGION}
-                - ${"--entry_group=" + args.TARGET_ENTRY_GROUP_ID}
-                - ${"--bucket=" + args.CLOUD_STORAGE_BUCKET_ID}
-                - ${"--folder=" + WORKFLOW_ID}
+                - ${"--target_project_id=" + args.TARGET_PROJECT_ID}
+                - ${"--target_location_id=" + args.CLOUD_REGION}
+                - ${"--target_entry_group_id=" + args.TARGET_ENTRY_GROUP_ID}
+                - ${"--output_bucket=" + args.CLOUD_STORAGE_BUCKET_ID}
+                - ${"--output_folder=" + WORKFLOW_ID}
             runtimeConfig:
-              version: "2.0"
+              version: "2.2"
               containerImage: ${args.CUSTOM_CONTAINER_IMAGE}
             environmentConfig:
               executionConfig:
@@ -138,17 +140,18 @@ main:
                 entry_groups:
                   - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryGroups/"+args.TARGET_ENTRY_GROUP_ID}
                 entry_types:
-                  -${"projects/PROJECT/locations/args.CLOUD_REGION/entryTypes/args.SOURCE-instance}"
-                  -${"projects/PROJECT/locations/args.CLOUD_REGION/entryTypes/args.SOURCE-schema}"
-                  -${"projects/PROJECT/locations/args.CLOUD_REGION/entryTypes/args.SOURCE-table}"
-                  -${${"projects/PROJECT/locations/args.CLOUD_REGION/entryTypes/args.SOURCE-view}"
-                  -${"projects/PROJECT/locations/args.CLOUD_REGION/entryTypes/args.SOURCE-database}"
+                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryTypes/postgresql-instance"}
+                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryTypes/postgresql-database"}
+                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryTypes/postgresql-schema"}
+                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryTypes/postgresql-table"}
+                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryTypes/postgresql-view"}
                 aspect_types:
-                  -${"projects/PROJECT/locations/args.CLOUD_REGION/aspectTypes/args.SOURCE-instance}"
-                  -${"projects/dataplex-types/args.CLOUD_REGION/global/aspectTypes/schema}"
-                  -${"projects/PROJECT/locations/args.CLOUD_REGION/aspectTypes/args.SOURCE-schema}"
-                  -${${"projects/PROJECT/locations/args.CLOUD_REGION/aspectTypes/args.SOURCE-table}"
-                  -${"projects/PROJECT/locations/args.CLOUD_REGION/aspectTypes/args.SOURCE-view}"
+                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/aspectTypes/postgresql-instance"}
+                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/aspectTypes/postgresql-database"}
+                  - "projects/dataplex-types/locations/global/aspectTypes/schema"
+                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/aspectTypes/postgresql-schema"}
+                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/aspectTypes/postgresql-table"}
+                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/aspectTypes/postgresql-view"}
         result: IMPORT_JOB_RESPONSE
 
     - get_job_start_time:
@@ -240,5 +243,4 @@ main:
 
     - the_end:
         return: ${IMPORT_JOB_STATUS}
-args:
-  SOURCE:
+
