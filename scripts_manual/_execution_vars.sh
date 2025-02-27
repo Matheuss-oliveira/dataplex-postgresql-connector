@@ -4,12 +4,13 @@ OUTPUT_FOLDER=output_folder
 OUTPUT_BUCKET=bucket-test-3434
 NETWORK_NAME=default
 
+SOURCE=postgresql
 TARGET_ENTRY_GROUP=postgresql-entry-group
 
 IMAGE=postgreslq-pyspark
 DOCKER_REPO=dataplex-connectors
 REPO_IMAGE=${LOCATION_ID}-docker.pkg.dev/${PROJECT_ID}/${DOCKER_REPO}/${IMAGE}
-SERVICE_ACCOUNT_NAME=dataplex-appscript@lab-xwf-cni.iam.gserviceaccount.com
+SERVICE_ACCOUNT_NAME=dataplex-appscript@dataplex-cni-3434.iam.gserviceaccount.com
 
 DB_HOST=repulsively-volcanic-goldfinch.data-1.use1.tembo.io
 DB_PORT=5432

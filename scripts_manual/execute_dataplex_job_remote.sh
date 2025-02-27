@@ -1,7 +1,7 @@
 DATAPLEX_API=dataplex.googleapis.com/v1/projects/$PROJECT_ID/locations/$REGION
 alias gcurl='curl -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json"'
 
-gcurl https://${DATAPLEX_API}/metadataJobs -d "$(cat <<EOF
+gcurl https://"${DATAPLEX_API}"/metadataJobs -d "$(cat <<EOF
 {
   "type": "IMPORT",
   "import_spec": {
