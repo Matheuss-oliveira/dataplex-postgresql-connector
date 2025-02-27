@@ -137,3 +137,71 @@ resource "google_secret_manager_regional_secret_version" "regional_secret_versio
   secret = google_secret_manager_regional_secret.secret-basic.id
   secret_data = "1osUtXYHsvHnkN7g" # TODO this is unsafe for prod, use for testing only
 }
+
+
+# NETWORK
+resource "google_compute_network" "net" {
+  name = var.network_name
+  auto_create_subnetworks = false
+}
+
+resource "google_compute_subnetwork" "subnet" {
+  name          = var.subnet_name
+  network       = google_compute_network.net.id
+  ip_cidr_range = "10.128.0.0/20"
+  region        = var.region
+  private_ip_google_access = true
+}
+
+resource "google_compute_router" "router" {
+  name    = var.router_name
+  region  = var.region
+  network = google_compute_network.net.name
+}
+
+resource "google_compute_router_nat" "nat" {
+  name                               = var.nat_name
+  router                             = google_compute_router.router.name
+  region                             = google_compute_router.router.region
+  nat_ip_allocate_option             = "AUTO_ONLY"
+  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+}
+
+# Workflow
+resource "google_workflows_workflow" "dataplex_workflow" {
+  name            = var.workflow_name
+  region          = var.region
+  #service_account = var.service_account_id
+
+  deletion_protection = false # set to "true" in production
+  source_contents = file("../files/workflow")
+}
+
+resource "google_cloud_scheduler_job" "job" {
+  name             = var.scheduler_name
+  schedule         = var.scheduler_value
+  time_zone        = var.scheduler_tz
+  attempt_deadline = "320s"
+
+  retry_config {
+    retry_count = 1
+  }
+
+  http_target {
+    http_method = "POST"
+    uri         = "https://workflowexecutions.googleapis.com/v1/${google_workflows_workflow.dataplex_workflow.id}/executions"
+    body = base64encode(
+      jsonencode({
+        "argument" : file("../files/workflow_args.json")
+        "callLogLevel" : "CALL_LOG_LEVEL_UNSPECIFIED"
+        }
+    ))
+
+    oauth_token {
+      service_account_email = var.default_service_account_id
+      scope                 = "https://www.googleapis.com/auth/cloud-platform"
+    }
+  }
+}
+
+

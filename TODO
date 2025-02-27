@@ -1,20 +1,22 @@
-secret manager
-jars to bucket
-other bucket
-variable polishing
-.evn for python code
-terraform
-command line cleaning , verification
-run import bucket origin depending on timestamp
-jar goes to bucket, or not? probably not
-cloud nat (terraform readme)
-TODO metadata job ID
-service account name
-subnet com private access + nat + router
-secret iac not working
-    "SERVICE_ACCOUNT": "SERVICE_ACCOUNT_ID", on workflow vars
-    diferent buckets, sas
-#https://cloud.google.com/sdk/gcloud/reference/dataproc/batches/submit
-# subnet with private google access must be enabled (default meyabe)
-# todo maybe service account, batch ID, others
-sa for workflow
+README STEPS
+- Update workflow_args.json file
+- Update terraform/terraform.tfvars file
+- Run Terraform
+- Build and push docker (change variable and run script)
+- Create secret version
+
+TERRAFORM
+- TESTE cloud nat (terraform readme) + network + subnetwork + router + private google access
+- SEPARATE (AFTER) service account pra fazer tudo
+- SEPARATE (AFTER) diferent buckets
+- SEPARATE (AFTER) diferent sas
+
+OTHERS
+- secret iac not working
+- variable pushing
+- teste blank project
+- manual script to readme
+- jars to bucket
+- other bucket
+- metadata e  job ID
+- push image

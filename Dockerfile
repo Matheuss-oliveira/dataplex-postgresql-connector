@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y procps tini
 RUN apt install -y wget
 
-COPY postgresql.jar .
+RUN wget https://jdbc.postgresql.org/download/postgresql-42.7.5.jar -O postgresql.jar
 
 ENV CONDA_HOME=/opt/miniconda3
 ENV PYSPARK_PYTHON=${CONDA_HOME}/bin/python

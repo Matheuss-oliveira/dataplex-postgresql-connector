@@ -3,7 +3,6 @@ gcloud dataproc batches submit pyspark \
     --region=${REGION} \
     --deps-bucket=${OUTPUT_BUCKET} \
     --container-image=${REPO_IMAGE} \
-    --jars=${SPARK_JAR_PATH} \
     --network=${NETWORK_NAME} \
     main.py \
 --  --target_project_id ${PROJECT_ID} \

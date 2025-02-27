@@ -49,3 +49,38 @@ variable "secret_name" {
 variable "roles" {
   type = list(string)
 }
+
+variable "network_name" {
+  type = string
+}
+
+variable "subnet_name" {
+  type = string
+}
+
+variable "router_name" {
+  type = string
+}
+
+variable "nat_name" {
+  type = string
+}
+
+variable "workflow_name" {
+  type = string
+}
+variable "scheduler_name" {
+  type = string
+}
+
+variable "scheduler_value" {
+  type = string
+}
+
+variable "scheduler_tz" {
+  type = string
+}
+
+variable "default_service_account_id" {
+  type = string
+}

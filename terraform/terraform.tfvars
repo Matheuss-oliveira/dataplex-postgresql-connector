@@ -29,7 +29,9 @@ api_services2 = [
     "dataproc.googleapis.com",
     "workflows.googleapis.com",
     "artifactregistry.googleapis.com",
-    "secretmanager.googleapis.com"
+    "secretmanager.googleapis.com",
+    "workflows.googleapis.com",
+    "cloudscheduler.googleapis.com",
 ]
 
 secret_name = "dataplex-postgresql-connector-secret"
@@ -50,3 +52,14 @@ roles = [
     "roles/workflows.invoker",
 ]
 
+network_name = "default2"
+subnet_name = "default2"
+router_name = "router-nat"
+nat_name = "nat"
+
+workflow_name = "workflow_name"
+scheduler_name = "scheduler"
+scheduler_value = "0 0 * * *"
+scheduler_tz = "America/New_York"
+
+default_service_account_id = "220147359620-compute@developer.gserviceaccount.com"
