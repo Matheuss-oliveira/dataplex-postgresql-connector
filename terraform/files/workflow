@@ -123,7 +123,7 @@ main:
           body:
             type: IMPORT
             import_spec:
-              source_storage_uri: ${"gs://" + args.CLOUD_STORAGE_BUCKET_ID + "/" + WORKFLOW_ID + "/"}
+              source_storage_uri: ${args.IMPORT_FILE_SOURCE_BUCKET}
               entry_sync_mode: FULL
               aspect_sync_mode: INCREMENTAL
               scope:

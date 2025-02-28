@@ -7,6 +7,7 @@
     "CREATE_TARGET_ENTRY_GROUP": false,
     "CLOUD_STORAGE_BUCKET_ID": "bucket-test-3434",
     "CUSTOM_CONTAINER_IMAGE": "us-central1-docker.pkg.dev/dataplex-cni-3434/dataplex-connectors/postgresql-pyspark",
+    "IMPORT_FILE_SOURCE_BUCKET" : "gs://bucket-test-3434/output_folder/",
     "PYSPARK_JOB_INPUT": [
         "--host=repulsively-volcanic-goldfinch.data-1.use1.tembo.io",
         "--user=postgres",
@@ -17,7 +18,7 @@
         "--target_location_id=us-central1",
         "--target_entry_group_id=postgresql-entry-group",
         "--output_bucket=bucket-test-3434",
-        "--output_folder=bucket-test-3434"
+        "--output_folder=output_folder"
     ],
     "IMPORT_JOB_SCOPE_ENTRY_GROUP": "projects/dataplex-cni-3434/locations/us-central1/entryGroups/postgresql-entry-group",
     "IMPORT_JOB_SCOPE_ENTRY_TYPES":  [
