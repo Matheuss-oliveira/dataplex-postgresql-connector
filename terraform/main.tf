@@ -164,7 +164,7 @@ resource "google_workflows_workflow" "dataplex_workflow" {
   #service_account = var.service_account_id
 
   deletion_protection = false # set to "true" in production
-  source_contents = file("../files/workflow")
+  source_contents = file("files/workflow")
 }
 
 resource "google_cloud_scheduler_job" "job" {
@@ -182,7 +182,7 @@ resource "google_cloud_scheduler_job" "job" {
     uri         = "https://workflowexecutions.googleapis.com/v1/${google_workflows_workflow.dataplex_workflow.id}/executions"
     body = base64encode(
       jsonencode({
-        "argument" : file("../files/workflow_args.json")
+        "argument" : file("files/workflow_args.json")
         "callLogLevel" : "CALL_LOG_LEVEL_UNSPECIFIED"
         }
     ))

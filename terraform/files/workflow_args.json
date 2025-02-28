@@ -17,7 +17,7 @@
         "--target_location_id=us-central1",
         "--target_entry_group_id=postgresql-entry-group",
         "--output_bucket=bucket-test-3434",
-        "--output_folder=${WORKFLOW_ID}"
+        "--output_folder=bucket-test-3434"
     ],
     "IMPORT_JOB_SCOPE_ENTRY_GROUP": "projects/dataplex-cni-3434/locations/us-central1/entryGroups/postgresql-entry-group",
     "IMPORT_JOB_SCOPE_ENTRY_TYPES":  [
