@@ -12,6 +12,7 @@ TERRAFORM
 - SEPARATE (AFTER) diferent sas
 
 OTHERS
+- use same sa
 - secret iac not working
 - variable pushing
 - teste blank project

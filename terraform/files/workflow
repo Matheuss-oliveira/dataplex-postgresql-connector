@@ -71,17 +71,7 @@ main:
               mainPythonFileUri: file:///main.py
               jarFileUris:
                 - ${"file://" + args.JAR_PATH}
-              args:
-                - ${"--host=" + args.POSTGRESQL_HOST}
-                - ${"--port=" + args.POSTGRESQL_PORT}
-                - ${"--user=" + args.POSTGRESQL_USER}
-                - ${"--password=" + args.POSTGRESQL_PASSWORD}
-                - ${"--database=" + args.POSTGRESQL_DATABASE}
-                - ${"--target_project_id=" + args.TARGET_PROJECT_ID}
-                - ${"--target_location_id=" + args.CLOUD_REGION}
-                - ${"--target_entry_group_id=" + args.TARGET_ENTRY_GROUP_ID}
-                - ${"--output_bucket=" + args.CLOUD_STORAGE_BUCKET_ID}
-                - ${"--output_folder=" + WORKFLOW_ID}
+              args: args.PYSPARK_JOB_INPUT
             runtimeConfig:
               version: "2.2"
               containerImage: ${args.CUSTOM_CONTAINER_IMAGE}
@@ -137,21 +127,9 @@ main:
               entry_sync_mode: FULL
               aspect_sync_mode: INCREMENTAL
               scope:
-                entry_groups:
-                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryGroups/"+args.TARGET_ENTRY_GROUP_ID}
-                entry_types:
-                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryTypes/postgresql-instance"}
-                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryTypes/postgresql-database"}
-                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryTypes/postgresql-schema"}
-                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryTypes/postgresql-table"}
-                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/entryTypes/postgresql-view"}
-                aspect_types:
-                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/aspectTypes/postgresql-instance"}
-                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/aspectTypes/postgresql-database"}
-                  - "projects/dataplex-types/locations/global/aspectTypes/schema"
-                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/aspectTypes/postgresql-schema"}
-                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/aspectTypes/postgresql-table"}
-                  - ${"projects/" + args.TARGET_PROJECT_ID + "/locations/" + args.CLOUD_REGION + "/aspectTypes/postgresql-view"}
+                entry_groups: args.IMPORT_JOB_SCOPE_ENTRY_GROUP
+                entry_types: args.IMPORT_JOB_SCOPE_ENTRY_TYPES
+                aspect_types: args.IMPORT_JOB_SCOPE_ASPECT_TYPES
         result: IMPORT_JOB_RESPONSE
 
     - get_job_start_time:

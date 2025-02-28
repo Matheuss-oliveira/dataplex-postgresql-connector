@@ -7,6 +7,9 @@ from pyspark.sql import SparkSession, DataFrame
 from src.constants import EntryType
 
 SPARK_JAR_PATH = '/postgresql.jar'
+if not os.path.exists(SPARK_JAR_PATH):
+    SPARK_JAR_PATH = 'postgresql.jar' # for local execution it expects the drive on the project root
+
 cwd = os.getcwd()
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logging.info(SPARK_JAR_PATH)
@@ -15,7 +18,7 @@ class PostgreSQLConnector:
     """Reads data from PostgreSQL and returns Spark Dataframes."""
 
     def __init__(self, config: Dict[str, str]):
-        # PySpark entrypoint - # Security manager some problems
+        # PySpark entrypoint - java configs to avoid security manager exception for newer spark versions
         self._spark = SparkSession.builder.appName("PostgreSQLIngestor") \
             .config("spark.jars", SPARK_JAR_PATH) \
             .config("spark.hadoop.fs.permissions.enabled", "false") \

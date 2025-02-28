@@ -2,7 +2,7 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 6.19.0"  # Or the latest version you want to use
+      version = "~> 6.19.0"  
     }
   }
 }
@@ -60,7 +60,7 @@ resource "google_artifact_registry_repository" "artifact_registry" {
 
 # APIS
 resource "google_project_service" "enabled_apis1" {
-  for_each = toset(var.api_services2)  # Use toset to ensure uniqueness
+  for_each = toset(var.api_services2)  
 
   service            = each.value
   disable_on_destroy = false
@@ -68,19 +68,17 @@ resource "google_project_service" "enabled_apis1" {
 }
 
 resource "google_project_service" "enabled_apis2" {
-  for_each = toset(var.api_services2)  # Use toset to ensure uniqueness
+  for_each = toset(var.api_services2)  
 
   service            = each.value
   disable_on_destroy = false
   project            = var.project_id
 }
 
-# To ensure all APIs are enabled before other resources are created:
 resource "null_resource" "api_dependencies" {
   depends_on = [google_project_service.enabled_apis1, google_project_service.enabled_apis2]
 }
 
-# SECRET
 resource "google_secret_manager_secret" "secret" {
   secret_id = var.secret_name
 
@@ -88,8 +86,6 @@ resource "google_secret_manager_secret" "secret" {
     auto {}
   }
 }
-
-# SERVICE ACCOUNT
 
 resource "google_service_account" "dataplex_sa" {
   account_id   = var.service_account_id
@@ -132,12 +128,6 @@ resource "google_secret_manager_regional_secret" "secret-basic" {
   secret_id = var.secret_name
   location = var.region
 }
-
-resource "google_secret_manager_regional_secret_version" "regional_secret_version_basic" {
-  secret = google_secret_manager_regional_secret.secret-basic.id
-  secret_data = "1osUtXYHsvHnkN7g" # TODO this is unsafe for prod, use for testing only
-}
-
 
 # NETWORK
 resource "google_compute_network" "net" {
