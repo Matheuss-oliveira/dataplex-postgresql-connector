@@ -2,12 +2,13 @@
 
 This project contains.
 - The connector itself, which consist into a Python/Pyspark application, usable by a CLI, that query a PostgreSQL instance, transform data items into Dataplex import format and save it on a Google Cloud bucket.
-- Dockefile and a build/push script, to pack the connector into an image and push it to a Google Cloud artifact Registry
+- Dockerfile and a build/push script, to pack the connector into an image and push it to a Google Cloud artifact Registry
 - Terraform files to deploy the infrastructure need to automate the execution of the connector and importation of the data to the Dataplex catalog in a Google Cloud environment. 
 - Scripts to run parts of the execution flow manually (locally or remotely) 
 
 # Some pre-requisites depending on the type of execution
 - Docker and Terraform installed
+- A GCP project (to host secrets and bucket)
 - Terminal authenticated with [Google ADC credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc). Execution on the GCP terminal can simplify the process
 - A user with the adequate roles/permissions (check the [main.tf](terraform/main.tf) for more details)
 - Python 3.11 
@@ -65,7 +66,7 @@ At this moment you will have
 
 
 
-# Running the application (almost) locally
+# Running the PySpark and triggering the dataplex locally  
 - Clone and enter this repository:
 ```bash
 git clone https://github.com/Matheuss-oliveira/dataplex-postgresql-connector
@@ -96,15 +97,17 @@ DB_PASSWORD_SECRET=dataplex-postgresql-connector-secret # The google secret id. 
 - On the **Secret Manager** of your console, inside the secret container created by the terraform, insert the DB password as a new secret version
   - It's possible to bypass the use of this cloud resource by updating the **get_password** function on **secret_manager.py** so it returns the password directly. It can be useful for testing/debugging.
 
+- Create the **Google Cloud Storage Bucket** and **folder** that will be used as output
+
 - Download the PostgreSQL JDBC Driver and save it on the root with the name **postgresql.jar**
 ```bash
-wget https://jdbc.postgresql.org/download -O postgresql.jar
+wget https://jdbc.postgresql.org/download/postgresql-42.7.5.jar -O postgresql.jar
 ```
 
 -  Execute the connector
 ```bash
 python main.py \
-    --target_project_id=${PROJECT_ID} 
+    --target_project_id=${PROJECT_ID} \
     --target_location_id=${LOCATION_ID} \
     --target_entry_group_id=${TARGET_ENTRY_GROUP} \
     --host=${DB_HOST} \
@@ -119,7 +122,7 @@ At this moment the generated output is available locally and uploaded to the def
 
 - Execute the dataplex import job
 ```bash
-DATAPLEX_API=dataplex.googleapis.com/v1/projects/$PROJECT_ID/locations/$REGION
+DATAPLEX_API=dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/${LOCATION_ID}
 alias gcurl='curl -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json"'
 
 gcurl https://"${DATAPLEX_API}"/metadataJobs -d "$(cat <<EOF
@@ -130,21 +133,21 @@ gcurl https://"${DATAPLEX_API}"/metadataJobs -d "$(cat <<EOF
     "entry_sync_mode": "FULL",
     "aspect_sync_mode": "INCREMENTAL",
     "scope": {
-      "entry_groups": ["projects/${PROJECT_ID}/locations/${REGION}/entryGroups/postgresql-entry-group"],
+      "entry_groups": ["projects/${PROJECT_ID}/locations/${LOCATION_ID}/entryGroups/postgresql-entry-group"],
       "entry_types": [
-        "projects/${PROJECT_ID}/locations/${REGION}/entryTypes/postgresql-instance",
-        "projects/${PROJECT_ID}/locations/${REGION}/entryTypes/postgresql-database",
-        "projects/${PROJECT_ID}/locations/${REGION}/entryTypes/postgresql-schema",
-        "projects/${PROJECT_ID}/locations/${REGION}/entryTypes/postgresql-table",
-        "projects/${PROJECT_ID}/locations/${REGION}/entryTypes/postgresql-view"],
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/entryTypes/postgresql-instance",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/entryTypes/postgresql-database",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/entryTypes/postgresql-schema",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/entryTypes/postgresql-table",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/entryTypes/postgresql-view"],
 
       "aspect_types": [
-        "projects/${PROJECT_ID}/locations/${REGION}/aspectTypes/postgresql-instance",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/aspectTypes/postgresql-instance",
         "projects/dataplex-types/locations/global/aspectTypes/schema",
-        "projects/${PROJECT_ID}/locations/${REGION}/aspectTypes/postgresql-database",
-        "projects/${PROJECT_ID}/locations/${REGION}/aspectTypes/postgresql-schema",
-        "projects/${PROJECT_ID}/locations/${REGION}/aspectTypes/postgresql-table",
-        "projects/${PROJECT_ID}/locations/${REGION}/aspectTypes/postgresql-view"],
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/aspectTypes/postgresql-database",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/aspectTypes/postgresql-schema",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/aspectTypes/postgresql-table",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/aspectTypes/postgresql-view"],
       },
     },
   }
@@ -154,7 +157,7 @@ EOF
 At this moment the data will be available on the GCP dataplex catalog
 
 
-## Building and executing the connector on cloud
+## Building and executing the connector on cloud, with manual triggers
 
 - Define the necessary variables
 ```bash
@@ -211,7 +214,7 @@ At this moment the generated output is available locally and uploaded to the def
 
 - Execute the dataplex import job
 ```bash
-DATAPLEX_API=dataplex.googleapis.com/v1/projects/$PROJECT_ID/locations/$REGION
+DATAPLEX_API=dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/${LOCATION_ID}
 alias gcurl='curl -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json"'
 
 gcurl https://"${DATAPLEX_API}"/metadataJobs -d "$(cat <<EOF
@@ -222,21 +225,21 @@ gcurl https://"${DATAPLEX_API}"/metadataJobs -d "$(cat <<EOF
     "entry_sync_mode": "FULL",
     "aspect_sync_mode": "INCREMENTAL",
     "scope": {
-      "entry_groups": ["projects/${PROJECT_ID}/locations/${REGION}/entryGroups/postgresql-entry-group"],
+      "entry_groups": ["projects/${PROJECT_ID}/locations/${LOCATION_ID}/entryGroups/postgresql-entry-group"],
       "entry_types": [
-        "projects/${PROJECT_ID}/locations/${REGION}/entryTypes/postgresql-instance",
-        "projects/${PROJECT_ID}/locations/${REGION}/entryTypes/postgresql-database",
-        "projects/${PROJECT_ID}/locations/${REGION}/entryTypes/postgresql-schema",
-        "projects/${PROJECT_ID}/locations/${REGION}/entryTypes/postgresql-table",
-        "projects/${PROJECT_ID}/locations/${REGION}/entryTypes/postgresql-view"],
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/entryTypes/postgresql-instance",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/entryTypes/postgresql-database",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/entryTypes/postgresql-schema",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/entryTypes/postgresql-table",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/entryTypes/postgresql-view"],
 
       "aspect_types": [
-        "projects/${PROJECT_ID}/locations/${REGION}/aspectTypes/postgresql-instance",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/aspectTypes/postgresql-instance",
         "projects/dataplex-types/locations/global/aspectTypes/schema",
-        "projects/${PROJECT_ID}/locations/${REGION}/aspectTypes/postgresql-database",
-        "projects/${PROJECT_ID}/locations/${REGION}/aspectTypes/postgresql-schema",
-        "projects/${PROJECT_ID}/locations/${REGION}/aspectTypes/postgresql-table",
-        "projects/${PROJECT_ID}/locations/${REGION}/aspectTypes/postgresql-view"],
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/aspectTypes/postgresql-database",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/aspectTypes/postgresql-schema",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/aspectTypes/postgresql-table",
+        "projects/${PROJECT_ID}/locations/${LOCATION_ID}/aspectTypes/postgresql-view"],
       },
     },
   }

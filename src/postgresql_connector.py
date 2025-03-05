@@ -7,10 +7,10 @@ from pyspark.sql import SparkSession, DataFrame
 from src.constants import EntryType
 
 SPARK_JAR_PATH = '/postgresql.jar'
-if not os.path.exists(SPARK_JAR_PATH):
-    SPARK_JAR_PATH = 'postgresql.jar' # for local execution it expects the drive on the project root
+if not os.path.exists(SPARK_JAR_PATH): # for local execution it expects the drive on the project root
+    cwd = os.getcwd()
+    SPARK_JAR_PATH = cwd + '/postgresql.jar'
 
-cwd = os.getcwd()
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logging.info(SPARK_JAR_PATH)
 
