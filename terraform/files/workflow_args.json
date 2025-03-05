@@ -39,6 +39,6 @@
     "IMPORT_JOB_LOG_LEVEL": "INFO",
     "NETWORK_TAGS": [],
     "NETWORK_URI": "",
-    "SUBNETWORK_URI": ""
+    "SUBNETWORK_URI": "default2"
 }
 

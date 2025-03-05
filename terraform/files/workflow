@@ -78,6 +78,7 @@ main:
             environmentConfig:
               executionConfig:
                   serviceAccount: ${args.SERVICE_ACCOUNT}
+                  subnetworkUri: ${args.SUBNETWORK_URI}
         result: RESPONSE_MESSAGE
 
     - check_pyspark_extract_job:
