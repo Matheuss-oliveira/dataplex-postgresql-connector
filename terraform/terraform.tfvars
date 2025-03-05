@@ -50,6 +50,8 @@ roles = [
     "roles/artifactregistry.reader",
     "roles/artifactregistry.writer",
     "roles/workflows.invoker",
+    "roles/dataproc.editor",
+    "roles/iam.serviceAccountUser", # Apparently we need this even if we use the same sa in workflow/dataproc
 ]
 
 network_name = "default2"

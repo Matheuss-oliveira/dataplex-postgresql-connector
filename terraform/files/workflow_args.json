@@ -1,6 +1,6 @@
 {
     "CLOUD_REGION": "us-central1",
-    "SERVICE_ACCOUNT": "220147359620-compute@developer.gserviceaccount.com",
+    "SERVICE_ACCOUNT": "dataplex-connector-sa@dataplex-cni-3434.iam.gserviceaccount.com",
     "TARGET_PROJECT_ID": "dataplex-cni-3434",
     "TARGET_ENTRY_GROUP_ID": "postgresql-entry-group",
     "JAR_PATH": "/postgresql.jar",

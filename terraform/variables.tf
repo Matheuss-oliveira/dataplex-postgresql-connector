@@ -75,7 +75,3 @@ variable "scheduler_value" {
 variable "scheduler_tz" {
   type = string
 }
-
-variable "default_service_account_id" {
-  type = string
-}
