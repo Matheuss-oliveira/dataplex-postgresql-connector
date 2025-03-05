@@ -61,5 +61,3 @@ workflow_name = "workflow_name"
 scheduler_name = "scheduler"
 scheduler_value = "0 0 * * *"
 scheduler_tz = "America/New_York"
-
-default_service_account_id = "220147359620-compute@developer.gserviceaccount.com"

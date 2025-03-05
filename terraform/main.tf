@@ -161,7 +161,7 @@ resource "google_compute_router_nat" "nat" {
 resource "google_workflows_workflow" "dataplex_workflow" {
   name            = var.workflow_name
   region          = var.region
-  #service_account = var.service_account_id
+  service_account = google_service_account.dataplex_sa.email
 
   deletion_protection = false # set to "true" in production
   source_contents = file("files/workflow")
@@ -188,7 +188,7 @@ resource "google_cloud_scheduler_job" "job" {
     ))
 
     oauth_token {
-      service_account_email = var.default_service_account_id
+      service_account_email = google_service_account.dataplex_sa.email}
       scope                 = "https://www.googleapis.com/auth/cloud-platform"
     }
   }

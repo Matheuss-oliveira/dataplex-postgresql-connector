@@ -31,6 +31,7 @@ terraform apply # confirm with "Yes"
 PROJECT_ID=dataplex-cni-3434 # Your project id 
 LOCATION_ID=us-central1 # The region to store the artifact
 IMAGE=postgresql-pyspark # The image name
+DOCKER_REPO=dataplex-connectors # Artifact registry docker repository
 ```
 
 - Build and push the Docker image
