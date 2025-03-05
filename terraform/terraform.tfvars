@@ -22,16 +22,19 @@ artifact_registry_id = "dataplex-connectors"
 api_services1 = [
     "iam.googleapis.com",
     "cloudresourcemanager.googleapis.com",
+    "compute.googleapis.com",
+    "serviceusage.googleapis.com",
+    "dataplex.googleapis.com",
 ]
 
 api_services2 = [
-    "dataplex.googleapis.com",
     "dataproc.googleapis.com",
     "workflows.googleapis.com",
     "artifactregistry.googleapis.com",
     "secretmanager.googleapis.com",
     "workflows.googleapis.com",
     "cloudscheduler.googleapis.com",
+    "logging.googleapis.com"
 ]
 
 secret_name = "dataplex-postgresql-connector-secret"

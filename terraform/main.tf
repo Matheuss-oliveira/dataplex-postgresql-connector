@@ -60,7 +60,7 @@ resource "google_artifact_registry_repository" "artifact_registry" {
 
 # APIS
 resource "google_project_service" "enabled_apis1" {
-  for_each = toset(var.api_services2)  
+  for_each = toset(var.api_services1)
 
   service            = each.value
   disable_on_destroy = false
@@ -105,7 +105,7 @@ resource "google_secret_manager_secret_iam_member" "secret_accessor" {
   secret_id = var.secret_name
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:${google_service_account.dataplex_sa.email}"
-  depends_on = [google_service_account.dataplex_sa, google_project_iam_member.dataplex_sa_roles]
+  depends_on = [google_service_account.dataplex_sa, google_project_iam_member.dataplex_sa_roles, google_secret_manager_secret.secret]
 }
 
 resource "google_storage_bucket_iam_member" "storage_object_user" {

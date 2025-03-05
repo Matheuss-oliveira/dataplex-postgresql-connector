@@ -1,6 +1,8 @@
 # Metadata connector from PostgreSQL to Google Dataplex Catalog
 
-This project contains.
+This project implements a managed pyspark job that fetch metadata from postgreSQL instances and injects into the Google Cloud Dataplex Catalog Tool. The [existing framework](https://cloud.google.com/dataplex/docs/managed-connectivity-overview) from Google Cloud documentation was used as base for it.
+
+This project contains:
 - The connector itself, which consist into a Python/Pyspark application, usable by a CLI, that query a PostgreSQL instance, transform data items into Dataplex import format and save it on a Google Cloud bucket.
 - Dockerfile and a build/push script, to pack the connector into an image and push it to a Google Cloud artifact Registry
 - Terraform files to deploy the infrastructure need to automate the execution of the connector and importation of the data to the Dataplex catalog in a Google Cloud environment. 
@@ -22,10 +24,21 @@ cd dataplex-postgresql-connector
 
 - Update the variables on the files: [terraform.tfvars](./terraform/terraform.tfvars), [workflow_args.json](./terraform/files/workflow_args.json)
 
-- Run the terraform command
+- Enter the terraform folder and run the terraform commands
 ```bash
+cd terraform
+terraform init
 terraform apply # confirm with "Yes"
 ```
+
+- Due to some Terraform inconsistencies, the full deploy might present errors and you might need to enable the following APIs manually on the GCP console:
+  - iam.googleapis.com
+  - cloudresourcemanager.googleapis.com
+  - compute.googleapis.com
+  - serviceusage.googleapis.com
+  - dataplex.googleapis.com
+
+After enabling them, execute the **terraform apply** again
 
 - Define the necessary variables
 ```bash
