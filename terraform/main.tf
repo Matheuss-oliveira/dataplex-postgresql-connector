@@ -215,43 +215,5 @@ resource "google_compute_firewall" "default_allow_internal" {
 
   source_ranges = ["10.128.0.0/9"]
   description   = "Permits incoming connections to VM instances from other instances within the same VPC network."
+  depends_on = [google_compute_subnetwork.subnet]
 }
-
-resource "google_compute_firewall" "default_allow_ssh" {
-  name    = "default-allow-ssh"
-  network = var.network_name
-  priority = 65534
-  direction = "INGRESS"
-  allow {
-    protocol = "tcp"
-    ports    = ["22"]
-  }
-  source_ranges = ["0.0.0.0/0"]
-  description   = "Lets you connect to instances with tools such as ssh, scp, or sftp."
-}
-
-resource "google_compute_firewall" "default_allow_rdp" {
-  name    = "default-allow-rdp"
-  network = var.network_name
-  priority = 65534
-  direction = "INGRESS"
-  allow {
-    protocol = "tcp"
-    ports    = ["3389"]
-  }
-  source_ranges = ["0.0.0.0/0"]
-  description   = "Lets you connect to instances using the Microsoft Remote Desktop Protocol (RDP)."
-}
-
-resource "google_compute_firewall" "default_allow_icmp" {
-  name    = "default-allow-icmp"
-  network = var.network_name
-  priority = 65534
-  direction = "INGRESS"
-  allow {
-    protocol = "icmp"
-  }
-  source_ranges = ["0.0.0.0/0"]
-  description   = "Lets you use tools such as ping."
-}
-

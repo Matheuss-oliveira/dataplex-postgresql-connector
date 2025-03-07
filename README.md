@@ -1,6 +1,8 @@
 # Metadata connector from PostgreSQL to Google Dataplex Catalog
 
-This project implements a managed pyspark job that fetch metadata from postgreSQL instances and injects into the Google Cloud Dataplex Catalog Tool. The [existing framework](https://cloud.google.com/dataplex/docs/managed-connectivity-overview) from Google Cloud documentation was used as base for it.
+This project implements a managed pyspark job that fetchs metadata from postgreSQL instances and injects into the Google Cloud Dataplex Catalog Tool. The [existing framework](https://cloud.google.com/dataplex/docs/managed-connectivity-overview) from Google Cloud documentation was used as base for it.
+
+This project was helped by @danielholgate which has developed similar connectors available on this repo [this repo](https://github.com/danielholgate/dataplex-catalog-connectors/tree/main/managed-connectivity/postgresql-connector). Eventually both projects might be merged.  
 
 This project contains:
 - The connector itself, which consist into a Python/Pyspark application, usable by a CLI, that query a PostgreSQL instance, transform data items into Dataplex import format and save it on a Google Cloud bucket.
@@ -68,14 +70,12 @@ At this moment you will have
 
 
 ### Details on the terraform script
-- Created infra
 - Simplifications
   - This project is using the same service account for different part of the process (push to artifact, running workflow, creating resources, etc...). It's possible to separate the process by detailing more the parameters and defining the roles/permissions on the terraform files
   - I'm also using the same buckets to store job dependencies, metadata staging files, etc... More segregation is possible
   - It's possible to have a bucket holding the jars dependencies (postresql driver), but in this project the container is downloading. This was done to simplify the architecture
   - The same region and project is being used for all the process. 
-  - Some jobs, process and definitions are being set with default values (e.g.: job id, network and subnetworks, etc...) 
-- Caveats
+  - Some jobs, process and definitions are being set with default values (e.g.: job id, batch id etc...) 
 
 
 

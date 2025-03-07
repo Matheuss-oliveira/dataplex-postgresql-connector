@@ -42,17 +42,25 @@ class PostgreSQLConnector:
 
     def get_db_schemas(self) -> DataFrame:
         """Get all schemas in the PostgreSQL database."""
-        query = "SELECT schema_name FROM information_schema.schemata"
+        query = """
+                SELECT DISTINCT schema_name
+                FROM information_schema.schemata
+                WHERE schema_name NOT LIKE 'pg_%'
+                  AND schema_name <> 'information_schema' \
+                """
         return self._execute(query)
 
     def _get_columns(self, schema_name: str, object_type: str) -> str:
         """Gets a list of columns in tables or views in a batch."""
-        return (f"SELECT c.table_name, c.column_name, c.data_type, c.is_nullable "
-                f"FROM information_schema.columns c "
-                f"INNER JOIN information_schema.tables t "
-                f"ON c.table_schema = t.table_schema AND c.table_name = t.table_name "
-                f"WHERE c.table_schema = '{schema_name}' "
-                f"AND t.table_type = '{object_type}'")
+        query =  f"""
+                SELECT c.table_name, c.column_name, c.data_type, c.is_nullable
+                FROM information_schema.columns c
+                INNER JOIN information_schema.tables t
+                    ON c.table_schema = t.table_schema AND c.table_name = t.table_name
+                WHERE c.table_schema = '{schema_name}'
+                AND t.table_type = '{object_type}'
+                """
+        return query
 
     def get_dataset(self, schema_name: str, entry_type: EntryType):
         """Gets data for a table or a view."""
